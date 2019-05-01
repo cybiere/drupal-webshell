@@ -1,0 +1,7 @@
+simple_shell.content:
+  path: '/shell'
+  defaults:
+    _controller: 'Drupal\simple_shell\Controller\SimpleShellController::content'
+    _title: 'Simple shell'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,18 @@
+<?php
+
+function simple_shell_theme($existing, $type, $theme, $path) {
+  $variables = array(
+    'simple_shell' => array(
+      'variables' => array(
+        'form' => NULL,
+        'ret' => NULL,
+        'retcode' => NULL,
+        'id' => NULL,
+        'hostname' => NULL,
+        'pwd' => NULL,
+      ),
+      'template' => 'simple_shell',
+    ),
+  );
+  return $variables;
+}

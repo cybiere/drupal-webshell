@@ -1,0 +1,17 @@
+<div class="info">
+	<dl>
+		<dt>Who :</dt>
+		<dd>{{ id|raw() }}</dd>
+		<dt>Where :</dt>
+		<dd>{{ hostname|raw() }} in folder {{ pwd|raw() }}</dd>
+	</dl>
+</div>
+<div class="command">
+	{{ form }}
+</div>
+{% if retcode is not null %}
+<p>Command returned with code <strong>{{retcode}}</strong></p>
+{% if retcode == 0 %}
+<div class="result" style="border:1px #555 solid; white-space: pre; font-family: mono; padding:3px;">{{ ret|raw() }}</div>
+{% endif %}
+{% endif %}
